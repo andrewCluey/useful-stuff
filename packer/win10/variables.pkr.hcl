@@ -6,7 +6,7 @@ variable "location" {
 variable "gallery_resource_group" {
   type        = string
   description = "Gallery Resource Group."
-  default = "rg-devbox"
+  default = "rg-devcenter"
 }
 
 variable "gallery_name" {

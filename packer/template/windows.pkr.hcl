@@ -79,7 +79,17 @@ build {
   # Install Chocolatey packages specified in the manifestr file (packages.config)
   provisioner "file" {
     source      = "../scripts/packages.config"
-    destination = "D:/packages.config"
+    destination = "D:/packages.config" 
+  }
+
+  provisioner "file" {
+    source = "../scripts/comment.cmtx"
+    destination = "C:\\windows\\system32\\grouppolicy\\user"
+  }
+
+  provisioner "file" {
+    source = "../scripts/Registry.pol"
+    destination = "C:\\windows\\system32\\grouppolicy\\user"
   }
 
   provisioner "powershell" {

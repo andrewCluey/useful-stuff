@@ -51,15 +51,15 @@ source "azure-arm" "vm" {
   # base image options (Azure Marketplace Images only)
   image_publisher    = "microsoftvisualstudio"
   image_offer        = "windowsplustools"
-  image_sku          = "base-win11-gen2"
+  image_sku          = "base-win10-gen2"
   image_version      = "latest"
 
   # Destination Image
   shared_image_gallery_destination {
     resource_group       = var.gallery_resource_group
     gallery_name         = var.gallery_name
-    image_name           = "win11-trusted"
-    image_version        = "1.0.0"
+    image_name           = "win10-locked"
+    image_version        = "1.2.0"
     storage_account_type = "Standard_LRS"
     target_region {
       name = var.location
@@ -78,15 +78,25 @@ build {
 
   # Install Chocolatey packages specified in the manifestr file (packages.config)
   provisioner "file" {
-    source      = "./scripts/packages.config"
+    source      = "../scripts/packages.config"
     destination = "D:/packages.config"
   }
 
-  provisioner "powershell" {
-    inline = ["choco install --confirm D:/packages.config"]
-    # See https://docs.chocolatey.org/en-us/choco/commands/install#exit-codes
-    valid_exit_codes = [0, 3010]
+  provisioner "file" {
+    source = "../scripts/comment.cmtx"
+    destination = "C:\\windows\\system32\\grouppolicy\\user\\comment.cmtx"
   }
+
+  provisioner "file" {
+    source = "../scripts/Registry.pol"
+    destination = "C:\\windows\\system32\\grouppolicy\\user\\Registry.pol"
+  }
+
+  #provisioner "powershell" {
+  #  inline = ["choco install --confirm D:/packages.config"]
+    # See https://docs.chocolatey.org/en-us/choco/commands/install#exit-codes
+  #  valid_exit_codes = [0, 3010]
+  #}
 
   provisioner "windows-restart" {}
 
